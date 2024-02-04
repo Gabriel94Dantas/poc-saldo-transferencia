@@ -1,4 +1,4 @@
-package com.example.PocSaldoTransferencia.producers;
+package com.example.PocSaldoTransferencia.notificacaoBacen.producers;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -7,29 +7,28 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Value;
 
-import com.example.PocSaldoTransferencia.contexts.KafkaContext;
-import com.example.PocSaldoTransferencia.entities.Transferencia;
-import com.example.PocSaldoTransferencia.utils.JsonUtil;
+import com.example.PocSaldoTransferencia.notificacaoBacen.contexts.KafkaNotificacaoBacenContext;
+import com.example.PocSaldoTransferencia.notificacaoBacen.dtos.TransferenciaDto;
+import com.example.PocSaldoTransferencia.notificacaoBacen.utils.JsonUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class EventProducer implements Closeable {
-
-    private final KafkaProducer<String, String> kafkaProducer;
+        private final KafkaProducer<String, String> kafkaProducer;
 
     @Value("${MY_TOPIC}")
     private String myTopic;
 
-    public EventProducer(KafkaContext kafkaContext){
-        this.kafkaProducer = new KafkaProducer<String, String>(kafkaContext.kafkaProperties());
+    public EventProducer(KafkaNotificacaoBacenContext kafkaContext){
+        this.kafkaProducer = new KafkaProducer<String, String>(kafkaContext.kafkaProducerProperties());
     }
 
-    public void send(Transferencia transferencia){
+    public void send(TransferenciaDto transferenciaDto){
         try {
             JsonUtil jsonUtil = new JsonUtil();
-            ProducerRecord<String, String> record = new ProducerRecord<String,String>("topic-notificacao-bacen", 
-                transferencia.getId().toString(), jsonUtil.toJson(transferencia));
+            ProducerRecord<String, String> record = new ProducerRecord<String,String>("topic-processado-bacen", 
+                transferenciaDto.getId().toString(), jsonUtil.toJson(transferenciaDto));
             
             kafkaProducer.send(record, (recordData,e) -> {
                 if (e != null){

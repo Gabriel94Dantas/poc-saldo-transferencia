@@ -11,7 +11,8 @@ public class RedisContext {
     private JedisPool jedisPool;
 
     public Jedis getConnection(){
-        jedisPool = new JedisPool("redis", 6379, "default", "admin");
+        //jedisPool = new JedisPool("redis", 6379, "default", "admin");
+        jedisPool = new JedisPool("localhost", 6379, "default", "admin");
         return jedisPool.getResource();
     }
 
