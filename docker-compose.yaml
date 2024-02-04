@@ -59,3 +59,15 @@ services:
     command: redis-server --requirepass admin
     ports:
       - "6379:6379"
+
+  api-saldo-transferencia:
+    build: .
+    hostname: api-saldo-transferencia
+    container_name: api-saldo-transferencia
+    ports:
+      - "8080:9001"
+    depends_on:
+      - zookeeper
+      - kafka
+      - redis
+      - postgres

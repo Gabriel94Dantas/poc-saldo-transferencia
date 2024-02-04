@@ -1,22 +1,16 @@
-package com.example.PocSaldoTransferencia.entities;
+package com.example.PocSaldoTransferencia.transferenciaStatus.dtos;
 
 import java.util.Date;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "transferencia", schema = "public")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class Transferencia {
+@AllArgsConstructor
+public class TransferenciaDto {
     
-    @Id
     private Integer id;
     private String agencia;
     private String conta;

@@ -1,5 +1,10 @@
 package com.example.PocSaldoTransferencia.services;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 import org.springframework.stereotype.Service;
 
 import com.example.PocSaldoTransferencia.dtos.requests.SaldoRequestDto;
@@ -7,16 +12,24 @@ import com.example.PocSaldoTransferencia.dtos.responses.SaldoResponseDto;
 import com.example.PocSaldoTransferencia.entities.Saldo;
 import com.example.PocSaldoTransferencia.mocks.entities.ClienteMock;
 import com.example.PocSaldoTransferencia.mocks.services.ClienteMockService;
+import com.example.PocSaldoTransferencia.notificacaoBacen.consumers.EventNotificacaoBacenConsumer;
 import com.example.PocSaldoTransferencia.repositories.SaldoRepository;
+import com.example.PocSaldoTransferencia.transferenciaStatus.consumers.EventTransferenciaStatusConsumer;
 
 @Service
 public class SaldoService {
 
     private SaldoRepository saldoRepository;
     private ClienteMockService clienteMockService;
+    private EventNotificacaoBacenConsumer eventConsumer;
+    private EventTransferenciaStatusConsumer eventTransferenciaStatusConsumer;
 
-    public SaldoService(SaldoRepository saldoRepository){
+    public SaldoService(SaldoRepository saldoRepository, 
+        EventNotificacaoBacenConsumer eventConsumer, 
+        EventTransferenciaStatusConsumer eventTransferenciaStatusConsumer){
         this.saldoRepository = saldoRepository;
+        this.eventConsumer = eventConsumer;
+        this.eventTransferenciaStatusConsumer = eventTransferenciaStatusConsumer;
         this.clienteMockService = new ClienteMockService();
         clienteMockService.initializeMock();
     }
@@ -37,5 +50,25 @@ public class SaldoService {
 
     public void saveSaldo(Saldo saldo){
         saldoRepository.save(saldo);
+    }
+
+    public void createSampleData(){
+        Saldo saldo1 = new Saldo(1, "1111", "111111", 27678.87, new Date());
+        Saldo saldo2 = new Saldo(2, "2222", "222222", 560.76, new Date());
+        Saldo saldo3 = new Saldo(3, "3333", "333333", 45.98, new Date());
+        Saldo saldo4 = new Saldo(4, "4444", "444444", 154368.93, new Date());
+        Saldo saldo5 = new Saldo(5, "5555", "555555", 12.0, new Date());
+
+        List<Saldo> saldos = new ArrayList<Saldo>();
+        saldos.add(saldo1);
+        saldos.add(saldo2);
+        saldos.add(saldo3);
+        saldos.add(saldo4);
+        saldos.add(saldo5);
+
+        saldoRepository.saveAll(saldos);
+        
+        CompletableFuture.runAsync(() -> eventConsumer.getMessages());
+        CompletableFuture.runAsync(() -> eventTransferenciaStatusConsumer.getMessages());
     }
 }
