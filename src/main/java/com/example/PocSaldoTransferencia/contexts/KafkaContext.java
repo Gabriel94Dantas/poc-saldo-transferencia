@@ -11,8 +11,8 @@ public class KafkaContext {
     
     public Properties kafkaProperties(){
         Properties properties = new Properties();
-        //properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:19092");
-        properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:19092");
+        //properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         properties.setProperty(ProducerConfig.ACKS_CONFIG, "all");
