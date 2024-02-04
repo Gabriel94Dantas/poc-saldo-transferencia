@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
-public class EventConsumer {
+public class EventNotificacaoBacenConsumer {
 
     private Consumer<String, String> consumer;
     private EventProducer eventProducer;
@@ -31,7 +31,7 @@ public class EventConsumer {
     @Autowired
     private KafkaNotificacaoBacenContext kafkaNotificacaoBacenContext;
     
-    public EventConsumer(KafkaNotificacaoBacenContext kafkaContext, 
+    public EventNotificacaoBacenConsumer(KafkaNotificacaoBacenContext kafkaContext, 
          TransferenciaNotificacaoBacenService transferenciaService){
         this.kafkaNotificacaoBacenContext = kafkaContext;
         this.consumer = new KafkaConsumer<String, String> (kafkaNotificacaoBacenContext.kafkaConsumerProperties());
