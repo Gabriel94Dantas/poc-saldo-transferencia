@@ -3,6 +3,7 @@ package com.example.PocSaldoTransferencia.services;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import com.example.PocSaldoTransferencia.dtos.responses.SaldoResponseDto;
 import com.example.PocSaldoTransferencia.entities.Saldo;
 import com.example.PocSaldoTransferencia.mocks.entities.ClienteMock;
 import com.example.PocSaldoTransferencia.mocks.services.ClienteMockService;
+import com.example.PocSaldoTransferencia.notificacaoBacen.consumers.EventConsumer;
 import com.example.PocSaldoTransferencia.repositories.SaldoRepository;
 
 @Service
@@ -18,9 +20,12 @@ public class SaldoService {
 
     private SaldoRepository saldoRepository;
     private ClienteMockService clienteMockService;
+    private EventConsumer eventConsumer;
 
-    public SaldoService(SaldoRepository saldoRepository){
+    public SaldoService(SaldoRepository saldoRepository, 
+        EventConsumer eventConsumer){
         this.saldoRepository = saldoRepository;
+        this.eventConsumer = eventConsumer;
         this.clienteMockService = new ClienteMockService();
         clienteMockService.initializeMock();
     }
@@ -58,5 +63,7 @@ public class SaldoService {
         saldos.add(saldo5);
 
         saldoRepository.saveAll(saldos);
+        
+        CompletableFuture.runAsync(() -> eventConsumer.getMessages());
     }
 }
