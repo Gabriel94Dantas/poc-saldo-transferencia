@@ -12,20 +12,24 @@ import com.example.PocSaldoTransferencia.dtos.responses.SaldoResponseDto;
 import com.example.PocSaldoTransferencia.entities.Saldo;
 import com.example.PocSaldoTransferencia.mocks.entities.ClienteMock;
 import com.example.PocSaldoTransferencia.mocks.services.ClienteMockService;
-import com.example.PocSaldoTransferencia.notificacaoBacen.consumers.EventConsumer;
+import com.example.PocSaldoTransferencia.notificacaoBacen.consumers.EventNotificacaoBacenConsumer;
 import com.example.PocSaldoTransferencia.repositories.SaldoRepository;
+import com.example.PocSaldoTransferencia.transferenciaStatus.consumers.EventTransferenciaStatusConsumer;
 
 @Service
 public class SaldoService {
 
     private SaldoRepository saldoRepository;
     private ClienteMockService clienteMockService;
-    private EventConsumer eventConsumer;
+    private EventNotificacaoBacenConsumer eventConsumer;
+    private EventTransferenciaStatusConsumer eventTransferenciaStatusConsumer;
 
     public SaldoService(SaldoRepository saldoRepository, 
-        EventConsumer eventConsumer){
+        EventNotificacaoBacenConsumer eventConsumer, 
+        EventTransferenciaStatusConsumer eventTransferenciaStatusConsumer){
         this.saldoRepository = saldoRepository;
         this.eventConsumer = eventConsumer;
+        this.eventTransferenciaStatusConsumer = eventTransferenciaStatusConsumer;
         this.clienteMockService = new ClienteMockService();
         clienteMockService.initializeMock();
     }
@@ -65,5 +69,6 @@ public class SaldoService {
         saldoRepository.saveAll(saldos);
         
         CompletableFuture.runAsync(() -> eventConsumer.getMessages());
+        CompletableFuture.runAsync(() -> eventTransferenciaStatusConsumer.getMessages());
     }
 }
