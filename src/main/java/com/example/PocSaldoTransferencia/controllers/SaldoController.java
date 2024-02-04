@@ -4,6 +4,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,5 +44,19 @@ public class SaldoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(saldoResponseDto);
         }        
         return ResponseEntity.ok(saldoResponseDto);
+    }
+
+
+    @Operation(summary = "Criar Massa de Testes")
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "201", description = "Saldos Criados", 
+            content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "500", description = "Cliente não Encontrado", 
+            content = @Content(mediaType = "application/json")) 
+        })
+    @PostMapping(value = "/massaTeste")
+    public ResponseEntity<String> setMassaDados(){
+        saldoService.createSampleData();
+        return ResponseEntity.status(HttpStatus.CREATED).body("Sample criada com sucesso");
     }
 }

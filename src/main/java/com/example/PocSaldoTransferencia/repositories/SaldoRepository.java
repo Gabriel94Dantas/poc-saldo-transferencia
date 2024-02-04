@@ -8,7 +8,7 @@ import com.example.PocSaldoTransferencia.entities.Saldo;
 @Repository
 public interface SaldoRepository extends GenericRepository<Saldo, Integer> {
 
-    @Query(value = "select * from desafio.saldo where agencia = ? and conta = ?", 
+    @Query(value = "select * from public.saldo where agencia = ? and conta = ?", 
         nativeQuery = true)
     Saldo findByAgenciaAndConta(String agencia, String conta);
 }
