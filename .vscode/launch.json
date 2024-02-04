@@ -8,14 +8,20 @@
             "type": "java",
             "name": "Current File",
             "request": "launch",
-            "mainClass": "${file}"
+            "mainClass": "${file}",
+            "env": {
+                "MY_TOPIC": "topic-default"
+              }
         },
         {
             "type": "java",
             "name": "PocSaldoTransferencia",
             "request": "launch",
             "mainClass": "com.example.PocSaldoTransferencia.PocSaldoTransferencia",
-            "projectName": "poc-saldo-transferencia"
+            "projectName": "poc-saldo-transferencia",
+            "env": {
+                "MY_TOPIC": "topic-default"
+              }
         }
     ]
 }

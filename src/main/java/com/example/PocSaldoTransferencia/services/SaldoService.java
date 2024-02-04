@@ -34,4 +34,8 @@ public class SaldoService {
         return new SaldoResponseDto(clienteMock.getAgencia(), clienteMock.getConta(),
             clienteMock.getNome(), saldo.getValor().toString(), "Saldo Consultado com Sucesso");
     }
+
+    public void saveSaldo(Saldo saldo){
+        saldoRepository.save(saldo);
+    }
 }

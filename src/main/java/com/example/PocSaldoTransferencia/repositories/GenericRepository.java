@@ -12,6 +12,7 @@ public interface GenericRepository<T,ID> extends Repository<T, ID> {
     boolean existsById(ID id);
     Iterable<T> findAll();
     Iterable<T> findAllById(Iterable<ID> ids);
-    long count();
+    int count();
+    <S extends T> S save(S entity);
 
 }

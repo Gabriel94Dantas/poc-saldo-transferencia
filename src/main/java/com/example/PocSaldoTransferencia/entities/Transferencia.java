@@ -1,5 +1,7 @@
 package com.example.PocSaldoTransferencia.entities;
 
+import java.util.Date;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -23,5 +25,6 @@ public class Transferencia {
     private String instituicaoDestino;
     private String status;
     private Double valor;
+    private Date dataTransacao;
 
 }
